@@ -9,7 +9,12 @@ export const SITE_CONFIG = {
 		"岩手県奥州市を拠点に、AIを活用した業務改善やDX推進、Webサイト・ECサイト制作、アプリ開発を行っています。地域の中小企業がデジタルを実務で活かせるよう支援します。",
 	url: process.env.NEXT_PUBLIC_SITE_URL || "https://tanebi-net.com",
 	author: "TANEBI CREATIVE",
-	twitterHandle: "@tanebi_creative", // Replace with actual handle
+	// X（旧Twitter）のアカウントは未開設。実在しない @tanebi_creative を
+	// twitter:site / twitter:creator として出力していたため削除した
+	// （x.com / twitter.com とも 404 を確認）。
+	// アカウントを作ったら twitterHandle をここに戻し、
+	// DEFAULT_METADATA と buildPageSocialMetadata の twitter に
+	// site / creator を足せば復活する。
 	ogImage: "/images/ogp.png", // Default OG Image
 };
 
@@ -147,7 +152,6 @@ export const BLOG_LIST_METADATA: Metadata = {
 	},
 	twitter: {
 		card: "summary",
-		site: SITE_CONFIG.twitterHandle,
 		title: `ブログ | ${SITE_CONFIG.name}`,
 		description: "技術記事やプロジェクトについての情報を発信しています。",
 	},
@@ -187,8 +191,6 @@ export const DEFAULT_METADATA: Metadata = {
 	},
 	twitter: {
 		card: "summary_large_image",
-		site: SITE_CONFIG.twitterHandle,
-		creator: SITE_CONFIG.twitterHandle,
 		images: [SITE_CONFIG.ogImage],
 	},
 	robots: {
@@ -367,8 +369,6 @@ export function buildPageSocialMetadata({
 		},
 		twitter: {
 			card: "summary_large_image",
-			site: SITE_CONFIG.twitterHandle,
-			creator: SITE_CONFIG.twitterHandle,
 			title,
 			description,
 			images: [imageUrl],

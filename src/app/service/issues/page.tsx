@@ -161,7 +161,7 @@ export default function ServiceIssuesPage() {
 				english="Issues"
 				title="その課題、ここから伸ばせます"
 				visual={{
-					src: "/images/service_issue_fv.png",
+					src: "/images/service_issue_fv.webp",
 					alt: "書類の山や絡まった糸を抱え、疑問や不安を頭に浮かべながら立っている人たちのイラスト",
 					width: 1265,
 					height: 1244,

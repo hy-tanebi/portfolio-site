@@ -1,7 +1,13 @@
 // src/app/components/HomeClient.tsx
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import {
+	useState,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useCallback,
+} from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import MissionSection, { type MissionSidebarHandle } from "./MissionSection";
@@ -56,7 +62,14 @@ export default function HomeClient() {
 	const targetScrollRef = useRef(0);
 	const currentScrollRef = useRef(0);
 
-	useEffect(() => {
+	// useEffect ではなく useLayoutEffect にすること。
+	// SSR の HTML は PC 用レイアウト（isMobile=false）で出力される。useEffect だと
+	// ブラウザが一度 PC 用で描画したあとにスマホ用へ切り替わり、その位置移動が
+	// layout shift として計上される（Lighthouse で CLS 0.367 を実測）。
+	// ヒーローのコピーを最初から表示するようにした（Googlebot 対策）ことで、
+	// それまで opacity:0 で隠れていたこの切り替えが見えるようになった。
+	// useLayoutEffect なら最初の描画の前に判定が終わるので、切り替え自体が起きない。
+	useLayoutEffect(() => {
 		const checkMobile = () => {
 			setIsMobile(window.innerWidth < 768);
 		};

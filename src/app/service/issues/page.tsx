@@ -23,15 +23,17 @@ import {
 } from "@/lib/seo";
 
 const ISSUES_DESCRIPTION =
-	"ホームページを作って終わりにしない改善、ネット販売の立て直し、社内業務のツール化、増えすぎたツール費用の見直し、社内でAIを使える状態にすること。「こうしたい」から一緒に進めます。初回相談は無料です。";
+	"ホームページが仕事につながらない、Excelや手作業の限界、増えたツールの費用、問い合わせ窓口の分散、AIを業務で使えない。岩手県奥州市の事業者の困りごとから、DX・AI導入の進め方を探せます。";
 
+// title / description は「検索する人が使う言葉」で書く（見出し・本文は日常語のまま）。
+// 屋号は seo.ts の title.template が付けるのでここには書かない。
 export const metadata: Metadata = {
-	// 屋号は seo.ts の title.template が付けるのでここには書かない
-	title: "その課題、ここから伸ばせます",
+	title: "DX・AI導入・業務の困りごとから探す（岩手・奥州市）",
 	alternates: { canonical: `${SITE_CONFIG.url}/service/issues` },
 	description: ISSUES_DESCRIPTION,
 	...buildPageSocialMetadata({
-		title: "その課題、ここから伸ばせます | TANEBI CREATIVE",
+		title:
+			"DX・AI導入・業務の困りごとから探す（岩手・奥州市） | TANEBI CREATIVE",
 		description: ISSUES_DESCRIPTION,
 		path: "/service/issues",
 	}),

@@ -17,6 +17,12 @@ export function CtaBlock() {
 				<br className="hidden lg:inline" />
 				初回の相談は無料です。
 			</p>
+			{/* 地域名を本文に載せるための1行。title / description / JSON-LD には
+			    あるが、本文には「岩手」「奥州」が一度も出ていなかった（地域つき検索で不利）。
+			    この CtaBlock は LP 3ページ共通なので、ここに置けば全ページに入る。 */}
+			<p className="text-white/60 text-sm leading-loose mb-8">
+				岩手県奥州市を拠点に、岩手県内は対面で対応しています。
+			</p>
 			<HashJumpLink
 				href="/#contact"
 				className="group inline-flex items-center gap-3 rounded-full bg-white px-10 py-5 text-base font-bold text-[#1c50a1] transition-transform hover:scale-[1.03] active:scale-95"

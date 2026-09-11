@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 
 export const SITE_CONFIG = {
-	name: "TANEBI CREATIVE | 岩手・奥州のWeb開発・AI活用・DX支援",
-	/** title の template とパンくずに使う短い屋号。
-	 *  name をそのまま template に使うと下層ページの title が70文字超になり SERP で切れる。 */
+	/** サイト名（og:site_name / WebSite の name に使う）。屋号だけにする */
+	name: "TANEBI CREATIVE",
+	/** title の template とパンくずに使う短い屋号 */
 	shortName: "TANEBI CREATIVE",
+	/**
+	 * トップページの title。検索する人が使う言葉を先頭に置き、屋号は後ろに回す。
+	 * 屋号で探す人には後ろでも届き、総称語（DX・AI導入）で探す人には先頭が効く。
+	 * 優先順位は DX推進 → AI導入支援 → 業務システム開発 → Web制作、すべて地域名つき。
+	 */
+	defaultTitle:
+		"岩手・奥州市のDX推進・AI導入支援・業務システム開発 | TANEBI CREATIVE",
 	description:
-		"岩手県奥州市を拠点に、AIを活用した業務改善やDX推進、Webサイト・ECサイト制作、アプリ開発を行っています。地域の中小企業がデジタルを実務で活かせるよう支援します。",
+		"岩手県奥州市の事業者向けに、DX推進・AI導入支援・業務システム開発・Webサイト制作を行っています。事業の進め方から一緒に考え、社内で回る仕組みまで整えます。",
 	url: process.env.NEXT_PUBLIC_SITE_URL || "https://tanebi-net.com",
 	author: "TANEBI CREATIVE",
 	// X（旧Twitter）のアカウントは未開設。実在しない @tanebi_creative を
@@ -20,12 +27,12 @@ export const SITE_CONFIG = {
 
 export function generateKeywords(tags?: string[]): string[] {
 	const baseKeywords = [
-		"奥州市 AI事業者",
-		"岩手県 AI導入支援",
-		"奥州市 Web制作",
-		"岩手県 DX支援",
-		"AI業務効率化",
-		"ホームページ制作 岩手",
+		"岩手 DX推進",
+		"奥州市 DX支援",
+		"岩手 AI導入支援",
+		"奥州市 AI導入",
+		"岩手 業務システム開発",
+		"奥州市 ホームページ制作",
 		"TANEBI CREATIVE",
 		"タネビ クリエイティブ",
 	];
@@ -163,14 +170,13 @@ export const BLOG_LIST_METADATA: Metadata = {
 // サイト全体のデフォルトメタデータ
 export const DEFAULT_METADATA: Metadata = {
 	title: {
-		default: SITE_CONFIG.name,
+		default: SITE_CONFIG.defaultTitle,
 		// 各ページの title には屋号を書かないこと（ここで付与される）。
 		// 書くと「ページ名 | TANEBI CREATIVE | TANEBI CREATIVE | …」と二重になる。
 		template: `%s | ${SITE_CONFIG.shortName}`,
 	},
 	description: SITE_CONFIG.description,
-	keywords:
-		"奥州市 AI事業者, 岩手県 AI導入支援, 奥州市 Web制作, 岩手県 DX支援, AI業務効率化, ホームページ制作 岩手, TANEBI CREATIVE, タネビ クリエイティブ",
+	keywords: generateKeywords().join(", "),
 	authors: [{ name: SITE_CONFIG.author }],
 	creator: SITE_CONFIG.author,
 	openGraph: {
@@ -178,14 +184,14 @@ export const DEFAULT_METADATA: Metadata = {
 		locale: "ja_JP",
 		url: SITE_CONFIG.url,
 		siteName: SITE_CONFIG.name,
-		title: SITE_CONFIG.name,
+		title: SITE_CONFIG.defaultTitle,
 		description: SITE_CONFIG.description,
 		images: [
 			{
 				url: SITE_CONFIG.ogImage,
 				width: 1200,
 				height: 630,
-				alt: SITE_CONFIG.name,
+				alt: SITE_CONFIG.defaultTitle,
 			},
 		],
 	},
@@ -221,12 +227,8 @@ export function generateSiteJsonLd(): Record<string, unknown> {
 			{
 				"@type": ["ProfessionalService", "LocalBusiness"],
 				"@id": `${url}/#organization`,
-				name: "TANEBI CREATIVE（タネビ クリエイティブ）- 奥州市のAI事業者",
-				alternateName: [
-					"タネビ クリエイティブ",
-					"TANEBI CREATIVE",
-					"奥州市 AI事業者",
-				],
+				name: "TANEBI CREATIVE（タネビ クリエイティブ）",
+				alternateName: ["タネビ クリエイティブ", "TANEBI CREATIVE"],
 				url,
 				image: `${url}${SITE_CONFIG.ogImage}`,
 				description: SITE_CONFIG.description,
@@ -245,13 +247,12 @@ export function generateSiteJsonLd(): Record<string, unknown> {
 				},
 				areaServed: [{ "@type": "AdministrativeArea", name: "岩手県" }],
 				knowsAbout: [
-					"AI事業者",
+					"DX推進",
 					"AI導入支援",
-					"AI活用コンサルティング",
+					"業務システム開発",
+					"業務効率化・仕組みづくり",
+					"Webサイト制作・改善",
 					"SEO（AIO/LLMO を含む生成AI時代の検索最適化）",
-					"構造化データ・コンテンツ設計",
-					"岩手県内の中小企業向けDX・業務効率化支援",
-					"AIを活用した集客・Webサイト制作",
 					"AIによる事務作業の自動化",
 					"社内情報の整理・ナレッジ共有の仕組み作り",
 				],
@@ -271,20 +272,29 @@ export function generateSiteJsonLd(): Record<string, unknown> {
 			},
 			{
 				"@type": "Service",
-				"@id": `${url}/#service-web`,
-				name: "Web制作（SEO/AIO 対応）",
+				"@id": `${url}/#service-dx`,
+				name: "DX推進・AI導入支援",
 				provider: { "@id": `${url}/#organization` },
 				description:
-					"SEO（AIO/LLMO を含む）の基本に忠実な高品質なWebサイト制作。人間への訴求力と、検索エンジン・生成AIへの可読性を両立します。",
+					"事業の進め方を一緒に考えるところから、AIを業務で使える状態にし、人が変わっても回る仕組みに整えるまでを支援します。",
 				areaServed: { "@type": "AdministrativeArea", name: "岩手県" },
 			},
 			{
 				"@type": "Service",
-				"@id": `${url}/#service-dx`,
-				name: "AI実務活用・DX支援・SEO対応",
+				"@id": `${url}/#service-system`,
+				name: "業務システム開発",
 				provider: { "@id": `${url}/#organization` },
 				description:
-					"AI活用による業務効率化・DX推進サポート。LLM 活用（LLMO）の観点も含めた社内ナレッジの整理と活用を支援します。",
+					"業務の課題に合わせた社内向けツール・システムの設計と開発。既存業務を止めずに段階的に移行します。",
+				areaServed: { "@type": "AdministrativeArea", name: "岩手県" },
+			},
+			{
+				"@type": "Service",
+				"@id": `${url}/#service-web`,
+				name: "Webサイト制作・改善",
+				provider: { "@id": `${url}/#organization` },
+				description:
+					"問い合わせにつながるWebサイトの制作と改善。受け取ったあとの社内の流れまで含めて設計します。",
 				areaServed: { "@type": "AdministrativeArea", name: "岩手県" },
 			},
 		],

@@ -22,15 +22,18 @@ import {
 } from "@/lib/seo";
 
 const SERVICE_DESCRIPTION =
-	"問い合わせを取りこぼさないWebサイトの制作・改善、AI活用の相談、業務ツールの開発。受け取ったあとの社内の流れまで含めて設計します。どれも「まず話を聞いてから」始められます。初回相談は無料です。";
+	"岩手県奥州市を拠点に、DX推進・AI導入支援・業務システム開発・Webサイトの制作と改善に対応。問い合わせを受けたあとの社内の流れまで含めて設計します。初回相談は無料です。";
 
+// title / description は「検索する人が使う言葉」で書く（見出し・本文は日常語のまま）。
+// ページの見出し「できること ─ ご相談メニュー」は読み手向けの文言なので title には使わない。
+// 屋号は seo.ts の title.template が付けるのでここには書かない。
 export const metadata: Metadata = {
-	// 屋号は seo.ts の title.template が付けるのでここには書かない
-	title: "できること ─ ご相談メニュー",
+	title: "DX推進・AI導入支援・業務システム開発（岩手・奥州市）",
 	alternates: { canonical: `${SITE_CONFIG.url}/service` },
 	description: SERVICE_DESCRIPTION,
 	...buildPageSocialMetadata({
-		title: "できること ─ ご相談メニュー | TANEBI CREATIVE",
+		title:
+			"DX推進・AI導入支援・業務システム開発（岩手・奥州市） | TANEBI CREATIVE",
 		description: SERVICE_DESCRIPTION,
 		path: "/service",
 	}),
@@ -40,6 +43,9 @@ type Menu = {
 	id: string;
 	en: string;
 	title: string;
+	/** 検索する人が使う業界用語。見出しの下に小さく添え、JSON-LD の Service 名にも使う。
+	 *  本文の日常語（CLAUDE.md 1.5）は変えず、探す側の言葉と一致させるための補足。 */
+	searchLabel: string;
 	body: string[];
 	items: string[];
 	/** 他メニューへの案内。リンクを含むため本文とは別枠で扱う */
@@ -51,6 +57,7 @@ const menus: Menu[] = [
 		id: "web",
 		en: "Web",
 		title: "Webサイトの制作・改善",
+		searchLabel: "ホームページ制作・Webサイト改善",
 		body: [
 			"問い合わせが来ないとき、原因は見た目より前にあります。情報が多すぎて肝心なことが埋もれている、知りたいことが書いていない、問い合わせ先が見つからない。人はそこで黙って離れていきます。",
 			"情報とゴールへの導線を切り分けて、より目的につながる設計を提案します。",
@@ -82,6 +89,7 @@ const menus: Menu[] = [
 		id: "ai",
 		en: "AI",
 		title: "AI活用の相談",
+		searchLabel: "AI導入支援・DX推進",
 		body: [
 			"AIの使い道は、作業を自動化することだけではありません。事業の進め方を考えるときの相談相手にもなりますし、頭の中にある段取りを整理する道具にもなります。まずは業務を聞き取って、AIが向いていること・向いていないことを一緒に見極めます。",
 			"「Claude CodeやCodexのようなAIツールを使って、開発や事務作業を効率化してみたい。でも周りに詳しい人がいない」という場合もご相談ください。何にどう使えるかを、実際の業務内容を見ながら一緒に考えます。",
@@ -100,6 +108,7 @@ const menus: Menu[] = [
 		id: "tools",
 		en: "Tools",
 		title: "業務ツールの開発",
+		searchLabel: "業務システム開発",
 		body: [
 			"「この作業に時間がかかっている」「この管理を何とかしたい」という課題に合わせて、社内で使うツールやアプリを開発します。認証・管理画面・データ出力など、必要な機能を業務に沿って組み立てます。",
 			"複数のSaaSを別々に契約して使い分けている場合は、まず現状を整理したうえで、業務に合わせたツールに一元化する開発を行います。ツールの数と月々にかかっている費用を、まとめて見直せます。",
@@ -175,7 +184,7 @@ export default function ServicePage() {
 		generateServiceCatalogJsonLd(
 			menus.map((menu) => ({
 				id: menu.id,
-				name: menu.title,
+				name: `${menu.searchLabel}（${menu.title}）`,
 				description: menu.body[0],
 			})),
 		),
@@ -226,9 +235,12 @@ export default function ServicePage() {
 							</p>
 							<div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 lg:gap-12">
 								<div>
-									<h3 className="text-2xl lg:text-3xl font-black mb-5">
+									<h3 className="text-2xl lg:text-3xl font-black mb-2">
 										{menu.title}
 									</h3>
+									<p className="text-xs lg:text-sm text-muted-foreground tracking-wide mb-5">
+										{menu.searchLabel}
+									</p>
 									{menu.body.map((paragraph) => (
 										<p
 											key={paragraph}
